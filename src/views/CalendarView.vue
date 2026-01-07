@@ -1,16 +1,17 @@
 <template>
     <div class="p-4">
-        <div class="card shadow-2 p-3 surface-card border-round">
-            <FullCalendar :options="calendarOptions" />
-
-            <div class="flex flex-wrap justify-content-center gap-4 mt-4 pt-3 border-top-1 border-200">
-                <div class="flex align-items-center gap-2">
-                    <Tag value=" " :style="{ backgroundColor: '#3b82f6', width: '1rem', height: '1rem' }" rounded />
-                    <span class="text-sm font-medium text-700">Pending</span>
-                </div>
-                <div class="flex align-items-center gap-2">
-                    <Tag value=" " :style="{ backgroundColor: '#10b981', width: '1rem', height: '1rem' }" rounded />
-                    <span class="text-sm font-medium text-700">Completed</span>
+        <div class="calendar-page-container">
+            <div class="card shadow-2 p-3 surface-card border-round">
+                <FullCalendar :options="calendarOptions" />
+                <div class="flex flex-wrap justify-content-center gap-4 mt-4 pt-3 border-top-1 border-200">
+                    <div class="flex align-items-center gap-2">
+                        <Tag value=" " :style="{ backgroundColor: '#3b82f6', width: '1rem', height: '1rem' }" rounded />
+                        <span class="text-sm font-medium text-700">Pending</span>
+                    </div>
+                    <div class="flex align-items-center gap-2">
+                        <Tag value=" " :style="{ backgroundColor: '#10b981', width: '1rem', height: '1rem' }" rounded />
+                        <span class="text-sm font-medium text-700">Completed</span>
+                    </div>
                 </div>
             </div>
         </div>

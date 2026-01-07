@@ -27,8 +27,11 @@
                                         {{ task.text }}
                                     </span>
                                 </div>
-                                <Button icon="pi pi-pencil" text @click="openEdit(task)" />
-                                <Button icon="pi pi-trash" severity="danger" text @click="store.deleteTask(task.id)" />
+                                <div>
+                                    <Button icon="pi pi-pencil" text @click="openEdit(task)" />
+                                    <Button icon="pi pi-trash" severity="danger" text
+                                        @click="store.deleteTask(task.id)" />
+                                </div>
                             </div>
 
                             <div class="flex-grow-1 ml-5">
