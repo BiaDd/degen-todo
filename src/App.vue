@@ -4,11 +4,12 @@
       <div class="flex align-items-center justify-content-between max-w-7xl mx-auto">
         <div class="flex align-items-center gap-2">
           <i class="pi pi-check-square text-primary text-2xl"></i>
-          <h1 class="text-xl font-bold m-0">TaskMaster</h1>
+          <h1 class="text-xl font-bold m-0">DoomTodo</h1>
         </div>
 
         <nav class="flex gap-4">
           <router-link to="/" class="nav-link">Home</router-link>
+          <router-link to="/calendar" class="nav-link"> Calendar</router-link>
           <router-link to="/about" class="nav-link">About</router-link>
         </nav>
       </div>
