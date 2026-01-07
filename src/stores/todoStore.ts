@@ -6,7 +6,7 @@ interface TodoObject {
   id: number
   text: string
   description?: string
-  dueDate: Date
+  dueDate: Date | null
   completed: boolean
 }
 

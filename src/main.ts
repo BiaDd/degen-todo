@@ -8,9 +8,11 @@ import router from './router'
 import Aura from '@primeuix/themes/aura'
 import 'primeicons/primeicons.css'
 import '/node_modules/primeflex/primeflex.css' // Highly recommended for layout
-import Dialog from 'primevue/dialog';
-import DatePicker from 'primevue/datepicker';
 
+// Components
+import Dialog from 'primevue/dialog'
+import DatePicker from 'primevue/datepicker'
+import SelectButton from 'primevue/selectbutton'
 
 const app = createApp(App)
 app.use(createPinia())
@@ -20,7 +22,10 @@ app.use(PrimeVue, {
     preset: Aura,
   },
 })
-app.component('Dialog', Dialog);
-app.component('DatePicker', DatePicker);
+
+// Components
+app.component('Dialog', Dialog)
+app.component('DatePicker', DatePicker)
+app.component('SelectButton', SelectButton)
 
 app.mount('#app')
