@@ -32,6 +32,13 @@ export const useTodoStore = defineStore('todo', () => {
     })
   }
 
+  function updateTask(id: number, updatedData: Partial<TodoObject>) {
+    const index = tasks.value.findIndex((t) => t.id === id)
+    if (index !== -1) {
+      tasks.value[index] = { ...tasks.value[index], ...updatedData } as TodoObject
+    }
+  }
+
   function deleteTask(id: number) {
     tasks.value = tasks.value.filter((t) => t.id !== id)
   }
@@ -44,5 +51,5 @@ export const useTodoStore = defineStore('todo', () => {
   // Getters
   const completedCount = computed(() => tasks.value.filter((t) => t.completed).length)
 
-  return { tasks, addTask, deleteTask, toggleTask, completedCount }
+  return { tasks, addTask, deleteTask, toggleTask, updateTask, completedCount }
 })

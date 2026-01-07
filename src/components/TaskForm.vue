@@ -32,13 +32,13 @@ import InputText from 'primevue/inputtext'
 import DatePicker from 'primevue/datepicker'
 import Button from 'primevue/button'
 
-// 1. Update Props to include initialDate
-const props = defineProps < {
+const props = defineProps<{
     visible: boolean;
     initialDate?: Date | null;
-} > ();
+    taskToEdit?: any | null; // Add this prop to receive the task being edited
+}>();
 
-const emit = defineEmits(['update:visible', 'save'])
+const emit = defineEmits(['update:visible', 'save', 'update']) // Add 'update' emit
 
 const form = reactive({
     text: '',
@@ -46,28 +46,40 @@ const form = reactive({
     date: null as Date | null,
 })
 
-// 2. Add the Watcher to autofill the date when the dialog opens
 watch(() => props.visible, (isOpen) => {
     if (isOpen) {
-        // If initialDate exists (from Calendar), use it. 
-        // Otherwise (from HomeView), default to null or current date.
-        form.date = props.initialDate || null;
+        if (props.taskToEdit) {
+            // Fill form with existing task data
+            form.text = props.taskToEdit.text
+            form.description = props.taskToEdit.description || ''
+            form.date = props.taskToEdit.dueDate ? new Date(props.taskToEdit.dueDate) : null
+        } else {
+            // Reset for New Task
+            form.text = ''
+            form.description = ''
+            form.date = props.initialDate || null
+        }
     }
 })
 
-const close = () => {
-    emit('update:visible', false)
-}
-
 const submit = () => {
     if (form.text.trim()) {
-        emit('save', { ...form })
+        if (props.taskToEdit) {
+            // Send update event if we have an ID
+            emit('update', { id: props.taskToEdit.id, ...form })
+        } else {
+            emit('save', { ...form })
+        }
 
-        // Reset local form
+        // Reset and close
         form.text = ''
         form.description = ''
         form.date = null
         close()
     }
+}
+
+const close = () => {
+    emit('update:visible', false)
 }
 </script>
