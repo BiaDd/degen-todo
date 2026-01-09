@@ -35,8 +35,8 @@
     <Dialog v-model:visible="showVideo" modal header="Task Complete! Enjoy a break 💃" :style="{ width: '420px' }"
       @show="loadTikTok">
       <div class="flex justify-content-center">
-        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@j_butters4/video/7581509198257655070"
-          data-video-id="7581509198257655070" style="max-width: 325px;">
+        <blockquote v-if="currentTiktok" class="tiktok-embed" :cite="currentTiktok.url"
+          :data-video-id="currentTiktok.id" style="max-width: 325px;">
           <section></section>
         </blockquote>
       </div>
@@ -57,6 +57,27 @@ const store = useTodoStore();
 const showVideo = ref(false);
 
 const isCollapsed = ref(false);
+const randomTiktoks = [
+  {
+    id: '7565243627253894413',
+    url: 'https://www.tiktok.com/@staymadedits1/video/7565243627253894413'
+  },
+  {
+    id: '7581509198257655070',
+    url: 'https://www.tiktok.com/@j_butters4/video/7581509198257655070'
+  },
+  {
+    id: '7564521652072008991',
+    url: 'https://www.tiktok.com/@brookemonk_/video/7564521652072008991'
+  }
+];
+
+const currentTiktok = ref<typeof randomTiktoks[0] | undefined>();
+
+const pickRandomTiktok = () => {
+  const index = Math.floor(Math.random() * randomTiktoks.length);
+  currentTiktok.value = randomTiktoks[index];
+};
 
 // Watch for task completion
 watch(
@@ -106,6 +127,9 @@ const triggerCelebration = (): void => {
 };
 
 const loadTikTok = () => {
+  pickRandomTiktok();
+
+
   if (document.getElementById('tiktok-embed-script')) {
     // Script already loaded — reprocess embeds
     // @ts-ignore
