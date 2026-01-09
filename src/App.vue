@@ -31,14 +31,95 @@
     <div class="layout-main">
       <router-view />
     </div>
+
+    <Dialog v-model:visible="showVideo" modal header="Task Complete! Enjoy a break 💃" :style="{ width: '420px' }"
+      @show="loadTikTok">
+      <div class="flex justify-content-center">
+        <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@j_butters4/video/7581509198257655070"
+          data-video-id="7581509198257655070" style="max-width: 325px;">
+          <section></section>
+        </blockquote>
+      </div>
+    </Dialog>
+
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Button from 'primevue/button';
+import { useTodoStore } from './stores/todoStore';
+import Dialog from 'primevue/dialog';
+import confetti from 'canvas-confetti';
+
+const store = useTodoStore();
+const showVideo = ref(false);
 
 const isCollapsed = ref(false);
+
+// Watch for task completion
+watch(
+  () => store.tasks.map(t => ({ id: t.id, completed: t.completed })),
+  (newTasks, oldTasks) => {
+    if (!oldTasks) return;
+
+    const justCompleted = newTasks.some(newTask => {
+      const oldTask = oldTasks.find(t => t.id === newTask.id);
+      return newTask.completed && oldTask && !oldTask.completed;
+    });
+
+    if (justCompleted) {
+      triggerCelebration();
+    }
+  }
+);
+
+const triggerCelebration = (): void => {
+  // 1. Fire Confetti
+  const duration = 3 * 1000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 3,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 }, // Left side
+      colors: ['#3b82f6', '#10b981', '#f59e0b']
+    });
+    confetti({
+      particleCount: 3,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 }, // Right side
+      colors: ['#3b82f6', '#10b981', '#f59e0b']
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  }());
+
+  // 2. Open Video Modal
+  showVideo.value = true;
+};
+
+const loadTikTok = () => {
+  if (document.getElementById('tiktok-embed-script')) {
+    // Script already loaded — reprocess embeds
+    // @ts-ignore
+    window.tiktok?.load();
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.id = 'tiktok-embed-script';
+  script.src = 'https://www.tiktok.com/embed.js';
+  script.async = true;
+  document.body.appendChild(script);
+};
+
 </script>
 
 <style scoped>
