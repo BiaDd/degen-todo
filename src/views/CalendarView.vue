@@ -46,7 +46,7 @@ const calendarEvents = computed<EventInput[]>(() => {
         .map(task => ({
             id: String(task.id),
             title: task.text,
-            start: task.dueDate instanceof Date ? task.dueDate.toISOString() : task.dueDate,
+            start: task.dueDate instanceof Date ? task.dueDate.toISOString() : new Date(task.dueDate),
             backgroundColor: task.completed ? '#10b981' : '#3b82f6',
             borderColor: 'transparent',
         }));

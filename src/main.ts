@@ -8,6 +8,7 @@ import router from './router'
 import Aura from '@primeuix/themes/aura'
 import 'primeicons/primeicons.css'
 import '/node_modules/primeflex/primeflex.css' // Highly recommended for layout
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 // Components
 import Dialog from 'primevue/dialog'
@@ -15,7 +16,10 @@ import DatePicker from 'primevue/datepicker'
 import SelectButton from 'primevue/selectbutton'
 
 const app = createApp(App)
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate);
+
+app.use(pinia)
 app.use(router)
 app.use(PrimeVue, {
   theme: {

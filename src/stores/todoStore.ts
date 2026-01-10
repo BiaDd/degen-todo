@@ -52,4 +52,7 @@ export const useTodoStore = defineStore('todo', () => {
   const completedCount = computed(() => tasks.value.filter((t) => t.completed).length)
 
   return { tasks, addTask, deleteTask, toggleTask, updateTask, completedCount }
-})
+}, 
+{
+  persist: true
+} as any)
