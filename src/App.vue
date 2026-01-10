@@ -23,8 +23,12 @@
       </nav>
 
       <div class="mt-auto p-3 text-center">
-        <Button :icon="isCollapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'" @click="isCollapsed = !isCollapsed"
-          rounded text />
+        <Button
+          :icon="isCollapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"
+          @click="isCollapsed = !isCollapsed"
+          rounded
+          text
+        />
       </div>
     </div>
 
@@ -32,118 +36,124 @@
       <router-view />
     </div>
 
-    <Dialog v-model:visible="showVideo" modal header="Task Complete! Enjoy a break 💃" :style="{ width: '420px' }"
-      @show="loadTikTok">
+    <Dialog
+      v-model:visible="showVideo"
+      modal
+      header="Task Complete! Enjoy a break 💃"
+      :style="{ width: '420px' }"
+      @show="loadTikTok"
+    >
       <div class="flex justify-content-center">
-        <blockquote v-if="currentTiktok" class="tiktok-embed" :cite="currentTiktok.url"
-          :data-video-id="currentTiktok.id" style="max-width: 325px;">
+        <blockquote
+          v-if="currentTiktok"
+          class="tiktok-embed"
+          :cite="currentTiktok.url"
+          :data-video-id="currentTiktok.id"
+          style="max-width: 325px"
+        >
           <section></section>
         </blockquote>
       </div>
     </Dialog>
-
-
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import Button from 'primevue/button';
-import { useTodoStore } from './stores/todoStore';
-import Dialog from 'primevue/dialog';
-import confetti from 'canvas-confetti';
+import { ref, watch } from 'vue'
+import Button from 'primevue/button'
+import { useTodoStore } from './stores/todoStore'
+import Dialog from 'primevue/dialog'
+import confetti from 'canvas-confetti'
 
-const store = useTodoStore();
-const showVideo = ref(false);
+const store = useTodoStore()
+const showVideo = ref(false)
 
-const isCollapsed = ref(false);
+const isCollapsed = ref(false)
 const randomTiktoks = [
   {
     id: '7565243627253894413',
-    url: 'https://www.tiktok.com/@staymadedits1/video/7565243627253894413'
+    url: 'https://www.tiktok.com/@staymadedits1/video/7565243627253894413',
   },
   {
     id: '7581509198257655070',
-    url: 'https://www.tiktok.com/@j_butters4/video/7581509198257655070'
+    url: 'https://www.tiktok.com/@j_butters4/video/7581509198257655070',
   },
   {
     id: '7564521652072008991',
-    url: 'https://www.tiktok.com/@brookemonk_/video/7564521652072008991'
-  }
-];
+    url: 'https://www.tiktok.com/@brookemonk_/video/7564521652072008991',
+  },
+]
 
-const currentTiktok = ref<typeof randomTiktoks[0] | undefined>();
+const currentTiktok = ref<(typeof randomTiktoks)[0] | undefined>()
 
 const pickRandomTiktok = () => {
-  const index = Math.floor(Math.random() * randomTiktoks.length);
-  currentTiktok.value = randomTiktoks[index];
-};
+  const index = Math.floor(Math.random() * randomTiktoks.length)
+  currentTiktok.value = randomTiktoks[index]
+}
 
 // Watch for task completion
 watch(
-  () => store.tasks.map(t => ({ id: t.id, completed: t.completed })),
+  () => store.tasks.map((t) => ({ id: t.id, completed: t.completed })),
   (newTasks, oldTasks) => {
-    if (!oldTasks) return;
+    if (!oldTasks) return
 
-    const justCompleted = newTasks.some(newTask => {
-      const oldTask = oldTasks.find(t => t.id === newTask.id);
-      return newTask.completed && oldTask && !oldTask.completed;
-    });
+    const justCompleted = newTasks.some((newTask) => {
+      const oldTask = oldTasks.find((t) => t.id === newTask.id)
+      return newTask.completed && oldTask && !oldTask.completed
+    })
 
     if (justCompleted) {
-      triggerCelebration();
+      triggerCelebration()
     }
-  }
-);
+  },
+)
 
 const triggerCelebration = (): void => {
   // 1. Fire Confetti
-  const duration = 3 * 1000;
-  const end = Date.now() + duration;
+  const duration = 3 * 1000
+  const end = Date.now() + duration
 
-  (function frame() {
+  ;(function frame() {
     confetti({
       particleCount: 3,
       angle: 60,
       spread: 55,
       origin: { x: 0 }, // Left side
-      colors: ['#3b82f6', '#10b981', '#f59e0b']
-    });
+      colors: ['#3b82f6', '#10b981', '#f59e0b'],
+    })
     confetti({
       particleCount: 3,
       angle: 120,
       spread: 55,
       origin: { x: 1 }, // Right side
-      colors: ['#3b82f6', '#10b981', '#f59e0b']
-    });
+      colors: ['#3b82f6', '#10b981', '#f59e0b'],
+    })
 
     if (Date.now() < end) {
-      requestAnimationFrame(frame);
+      requestAnimationFrame(frame)
     }
-  }());
+  })()
 
   // 2. Open Video Modal
-  showVideo.value = true;
-};
+  showVideo.value = true
+}
 
 const loadTikTok = () => {
-  pickRandomTiktok();
-
+  pickRandomTiktok()
 
   if (document.getElementById('tiktok-embed-script')) {
     // Script already loaded — reprocess embeds
     // @ts-ignore
-    window.tiktok?.load();
-    return;
+    window.tiktok?.load()
+    return
   }
 
-  const script = document.createElement('script');
-  script.id = 'tiktok-embed-script';
-  script.src = 'https://www.tiktok.com/embed.js';
-  script.async = true;
-  document.body.appendChild(script);
-};
-
+  const script = document.createElement('script')
+  script.id = 'tiktok-embed-script'
+  script.src = 'https://www.tiktok.com/embed.js'
+  script.async = true
+  document.body.appendChild(script)
+}
 </script>
 
 <style scoped>
@@ -162,7 +172,6 @@ const loadTikTok = () => {
   overflow: hidden;
   white-space: nowrap;
 }
-
 
 .sidebar-collapsed {
   width: 70px;
